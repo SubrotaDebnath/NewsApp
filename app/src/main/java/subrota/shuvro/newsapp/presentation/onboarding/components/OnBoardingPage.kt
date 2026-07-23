@@ -20,14 +20,14 @@ import androidx.compose.ui.tooling.preview.Preview
 import subrota.shuvro.newsapp.R
 import subrota.shuvro.newsapp.presentation.Dimensions.MediumPadding1
 import subrota.shuvro.newsapp.presentation.Dimensions.MediumPadding2
-import subrota.shuvro.newsapp.presentation.onboarding.OnboardingPage
+import subrota.shuvro.newsapp.presentation.onboarding.Page
 import subrota.shuvro.newsapp.presentation.onboarding.pages
 import subrota.shuvro.newsapp.ui.theme.NewsAppTheme
 
 @Composable
-fun OnBoardingScreen(
+fun OnBoardingPage(
     modifier: Modifier = Modifier,
-    page: OnboardingPage,
+    page: Page,
 ) {
 
     Column(modifier = modifier) {
@@ -70,6 +70,6 @@ fun OnBoardingScreen(
 @Composable
 fun OnBoardingPagePreview(){
     NewsAppTheme {
-        OnBoardingScreen(page = pages[0])
+        OnBoardingPage(page = pages[0])
     }
 }
