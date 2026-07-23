@@ -1,6 +1,7 @@
 package subrota.shuvro.newsapp
 
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -12,19 +13,35 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.core.view.WindowCompat
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import androidx.lifecycle.lifecycleScope
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
+import subrota.shuvro.newsapp.domain.usecases.AppEntryUseCases
 import subrota.shuvro.newsapp.presentation.onboarding.OnBoardingScreen
+import subrota.shuvro.newsapp.presentation.onboarding.OnBoardingViewModel
 import subrota.shuvro.newsapp.ui.theme.NewsAppTheme
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
+    @Inject
+    lateinit var useCases: AppEntryUseCases
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         WindowCompat.setDecorFitsSystemWindows(window, false)
         installSplashScreen()
+        lifecycleScope.launch {
+            useCases.readAppEntry().collect {
+                Log.d("MainActivity Read App Entry", "onCreate: ${it.toString()}")
+            }
+        }
         enableEdgeToEdge()
         setContent {
             NewsAppTheme {
                 Box(modifier = Modifier.background(color = MaterialTheme.colorScheme.background)) {
-                    OnBoardingScreen()
+                    val viewModel: OnBoardingViewModel = hiltViewModel()
+                    OnBoardingScreen(event = viewModel::onEvent)
                 }
             }
         }
@@ -36,8 +53,6 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun GreetingPreview() {
     NewsAppTheme {
-        Box(modifier = Modifier.background(color = MaterialTheme.colorScheme.background)) {
-            OnBoardingScreen()
-        }
+
     }
 }

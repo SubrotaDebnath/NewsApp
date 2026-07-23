@@ -26,7 +26,9 @@ import subrota.shuvro.newsapp.presentation.onboarding.components.OnBoardingPage
 import subrota.shuvro.newsapp.presentation.onboarding.components.PageIndicator
 
 @Composable
-fun OnBoardingScreen() {
+fun OnBoardingScreen(
+    event: (OnBoardingEvent) -> Unit,
+) {
 
     Column(modifier = Modifier.fillMaxSize()) {
         val pagerState = rememberPagerState(initialPage = 0) {
@@ -67,8 +69,7 @@ fun OnBoardingScreen() {
                 val scope = rememberCoroutineScope()
                 if (buttonState.value[0].isNotEmpty()) {
                     NewsTextButton(
-                        text = buttonState.value[0],
-                        onClick = {
+                        text = buttonState.value[0], onClick = {
                             scope.launch {
                                 pagerState.animateScrollToPage(page = pagerState.currentPage - 1)
                             }
@@ -78,17 +79,15 @@ fun OnBoardingScreen() {
                 }
 
                 NewsButton(
-                    text = buttonState.value[1],
-                    onClick = {
+                    text = buttonState.value[1], onClick = {
                         scope.launch {
-                            if (pagerState.currentPage == 3) {
-                                // TODO: Navigate to Home Screen
+                            if (pagerState.currentPage == 2) {
+                                event(OnBoardingEvent.SaveAppEntry)
                             } else {
                                 pagerState.animateScrollToPage(page = pagerState.currentPage + 1)
                             }
                         }
-                    }
-                )
+                    })
             }
 
         }
